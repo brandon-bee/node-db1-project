@@ -22,22 +22,35 @@ router.get('/:id', checkAccountId, (req, res, next) => {
     })
 })
 
-router.post('/', checkAccountPayload, checkAccountNameUnique, async (req, res, next) => {
-  try {
-    const createdAccount = await Accounts.create(req.body)
-    res.status(201).json(createdAccount)
-  } catch (err) {
-    next(err)
-  }
+router.post('/', checkAccountPayload, checkAccountNameUnique, (req, res, next) => {
+  Accounts.create(req.body)
+    .then(createdAccount => {
+      res.status(201).json(createdAccount)
+    })
+    .catch(() => {
+      next()
+    })
 })
 
 router.put('/:id', checkAccountId, checkAccountPayload, checkAccountNameUnique, (req, res, next) => {
-  
+  Accounts.updateById(req.params.id, req.body)
+    .then(updatedAccount => {
+      res.json(updatedAccount)
+    })
+    .catch(() => {
+      next()
+    })
 });
 
-// router.delete('/:id', checkAccountId, (req, res, next) => {
-  
-// })
+router.delete('/:id', checkAccountId, (req, res, next) => {
+  Accounts.deleteById(req.params.id)
+    .then(() => {
+      res.json(req.account)
+    })
+    .catch(() => {
+      next()
+    })
+})
 
 router.use((err, req, res, next) => { // eslint-disable-line
   res.status(err.status || 500).json({
