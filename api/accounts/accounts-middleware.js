@@ -1,4 +1,4 @@
-const { get, getById } = require('./accounts-model');
+const { getAll, getById } = require('./accounts-model');
 
 exports.checkAccountPayload = (req, res, next) => {
   const { name, budget } = req.body
@@ -29,7 +29,7 @@ exports.checkAccountPayload = (req, res, next) => {
 
 exports.checkAccountNameUnique = async (req, res, next) => {
   try {
-    const accounts = await get()
+    const accounts = await getAll()
     accounts.map(account => {
       if (account.name === req.body.name.trim()) {
         next({
