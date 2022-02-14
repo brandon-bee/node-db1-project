@@ -22,13 +22,18 @@ router.get('/:id', checkAccountId, (req, res, next) => {
     })
 })
 
-router.post('/', checkAccountPayload, checkAccountNameUnique, (req, res, next) => {
-  
+router.post('/', checkAccountPayload, checkAccountNameUnique, async (req, res, next) => {
+  try {
+    const createdAccount = await Accounts.create(req.body)
+    res.status(201).json(createdAccount)
+  } catch (err) {
+    next(err)
+  }
 })
 
-// router.put('/:id', checkAccountId, checkAccountPayload, checkAccountNameUnique, (req, res, next) => {
+router.put('/:id', checkAccountId, checkAccountPayload, checkAccountNameUnique, (req, res, next) => {
   
-// });
+});
 
 // router.delete('/:id', checkAccountId, (req, res, next) => {
   

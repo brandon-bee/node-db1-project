@@ -9,7 +9,10 @@ const getById = id => {
 }
 
 const create = async account => {
-  const [id] = await db('accounts').insert(account)
+  const [id] = await db('accounts').insert({
+    name: account.name.trim(),
+    budget: account.budget
+  })
   const newAccount = await getById(id)
   return newAccount
 }
